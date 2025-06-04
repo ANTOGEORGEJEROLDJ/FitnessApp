@@ -48,6 +48,7 @@ struct WorkoutSummaryView: View {
         .onAppear {
             healthManager.requestAuthorization()
             healthManager.fetchTodayWorkout()
+
         }
     }
 

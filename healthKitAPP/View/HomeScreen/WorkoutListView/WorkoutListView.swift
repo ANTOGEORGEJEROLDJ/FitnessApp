@@ -6,8 +6,10 @@
 //
 
 
+import SwiftUI
 
 import SwiftUI
+import CoreData
 
 struct WorkoutListView: View {
     @FetchRequest(
@@ -53,6 +55,13 @@ struct WorkoutListView: View {
         .navigationTitle("Workout Tasks")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: WorkoutHistoryView()) {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .imageScale(.large)
+                }
+            }
+
+            ToolbarItem(placement: .navigationBarLeading) {
                 Button("Add Tasks", action: addDefaultTasks)
             }
         }
@@ -66,28 +75,25 @@ struct WorkoutListView: View {
         }
     }
 
-    /// Adds default workout tasks if none exist
     func addDefaultTasks() {
-        let taskNames = ["5km Run", "10 Push-ups", "15 min Yoga", "Plank 1 min", "Jump Rope 200x"]
+        let defaultTasks = [
+            ("5km Run", 1800.0, 300.0),
+            ("10 Push-ups", 120.0, 50.0),
+            ("15 min Yoga", 900.0, 100.0),
+            ("Plank 1 min", 60.0, 20.0),
+            ("Jump Rope 200x", 300.0, 150.0)
+        ]
 
-        for name in taskNames {
+        for (title, duration, calories) in defaultTasks {
             let workout = Workout(context: context)
-            workout.title = name
+            workout.title = title
             workout.date = Date()
             workout.isCompleted = false
+            workout.duration = duration
+            workout.calories = calories
         }
 
         saveContext()
         healthManager.updateProgressFromCoreData(context: context)
-    }
-}
-struct WorkoutListView_Previews: PreviewProvider {
-    static var previews: some View {
-        let context = PersistenceController.preview.container.viewContext
-        let healthManager = HealthManager()
-
-        return WorkoutListView()
-            .environment(\.managedObjectContext, context)
-            .environmentObject(healthManager)
     }
 }

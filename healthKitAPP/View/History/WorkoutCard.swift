@@ -22,45 +22,36 @@ struct IconLabel: View {
     }
 }
 
-
-struct WorkoutCard: View {
-    let workout: Workout
+struct WorkoutHistoryCard: View {
+    var workout: Workout
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Image(systemName: "calendar")
-                    .foregroundColor(.blue)
-                Text(formattedDate)
+                Image(systemName: "flame.fill")
+                    .foregroundColor(.orange)
+                    .font(.title2)
+                Text(workout.title ?? "Unnamed Workout")
                     .font(.headline)
             }
 
-            HStack {
-                IconLabel(icon: "flame.fill", text: "\(workout.calories) kcal", color: .red)
-                Spacer()
-                IconLabel(icon: "figure.walk", text: "\(workout.steps) steps", color: .orange)
-            }
+            Text(workout.date ?? Date(), style: .date)
+                .font(.subheadline)
+                .foregroundColor(.gray)
 
-            HStack {
-                IconLabel(icon: "clock.fill", text: "\(durationInMinutes) mins", color: .green)
-                Spacer()
-            }
+            Text("✅ Completed")
+                .font(.caption)
+                .foregroundColor(.green)
+                .padding(.top, 4)
         }
         .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .gray.opacity(0.15), radius: 5, x: 0, y: 3)
-    }
-
-    var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: workout.date ?? Date())
-    }
-
-    var durationInMinutes: Int {
-        Int(workout.duration / 60)
+        .frame(width: 360)
+        .shadow(radius: 30)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.white)
+                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+        )
     }
 }
 //
