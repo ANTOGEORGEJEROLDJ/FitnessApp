@@ -42,13 +42,15 @@ struct loginScreen: View {
                             .padding(.top, 40)
                             .cornerRadius(15)
 
-                        Text("Welcome Back!")
-                            .font(.largeTitle.bold())
-                            .foregroundColor(.white)
+//                        Text("Welcome Back!")
+//                            .font(.largeTitle.bold())
+//                            .foregroundColor(.white)
 
-//                        Text("Login to continue your fitness journey.")
-//                            .font(.subheadline)
-//                            .foregroundColor(.white.opacity(0.8))
+                        Text("Login to continue your fitness journey.")
+                            .font(.subheadline)
+                            .bold()
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.white.opacity(0.8))
 
                         VStack(spacing: 18) {
                             CustomTextField(icon: "person.fill", placeHolder: "Username", text: $userName)
@@ -67,9 +69,11 @@ struct loginScreen: View {
                                     navigateToDetails = true
                                 }) {
                                     Text("Add Details")
-                                        .frame(maxWidth: .infinity)
+                                        .frame(width: 240)
                                         .padding()
-                                        .background(LinearGradient(colors: [Color.orange, Color.red], startPoint: .top, endPoint: .bottom))
+                                        .bold()
+//                                        .background(LinearGradient(colors: [Color.orange, Color.red], startPoint: .top, endPoint: .bottom))
+                                        .background(Color.purple.opacity(0.7))
                                         .foregroundColor(.white)
                                         .font(.headline)
                                         .cornerRadius(16)
@@ -84,9 +88,11 @@ struct loginScreen: View {
                                 saveUser()
                             }) {
                                 Text("Login")
-                                    .frame(maxWidth: .infinity)
+                                    .frame(width: 240)
                                     .padding()
-                                    .background(LinearGradient(colors: [Color.blue, Color.indigo], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .bold()
+//                                    .background(LinearGradient(colors: [Color.blue, Color.indigo], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .background(Color.blue.opacity(0.7))
                                     .foregroundColor(.white)
                                     .font(.headline)
                                     .cornerRadius(16)

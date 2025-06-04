@@ -85,9 +85,10 @@ struct ProfileView: View {
                     // Logout Button
                     NavigationLink(destination: loginScreen()) {
                         Text("Log Out")
-                            .frame(maxWidth: .infinity)
+                            .frame(width: 200)
                             .padding()
-                            .background(Color.blue)
+                            .bold()
+                            .background(Color.purple.opacity(0.7))
                             .foregroundColor(.white)
                             .cornerRadius(12)
                     }
@@ -115,4 +116,3 @@ struct ProfileView: View {
         }
     }
 }
-
