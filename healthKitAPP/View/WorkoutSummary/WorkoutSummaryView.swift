@@ -11,39 +11,41 @@ struct WorkoutSummaryView: View {
     @EnvironmentObject var healthManager: HealthManager
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                Text("🏋️‍♂️ Workout Summary")
-                    .font(.largeTitle.bold())
-                    .padding(.top)
-
-                HStack(spacing: 16) {
-                    SummaryCard(icon: "flame.fill", title: "Calories", value: "\(Int(healthManager.calories)) kcal", color: .red)
-                    SummaryCard(icon: "figure.walk", title: "Steps", value: "\(healthManager.steps)", color: .blue)
+        NavigationView{
+            ScrollView {
+                VStack(spacing: 24) {
+                    Text("🏋️‍♂️ Workout Summary")
+                        .font(.largeTitle.bold())
+                        .padding(.top)
+                    
+                    HStack(spacing: 16) {
+                        SummaryCard(icon: "flame.fill", title: "Calories", value: "\(Int(healthManager.calories)) kcal", color: .red)
+                        SummaryCard(icon: "figure.walk", title: "Steps", value: "\(healthManager.steps)", color: .blue)
+                    }
+                    
+                    SummaryCard(icon: "clock.fill", title: "Duration", value: formattedDuration, color: .green)
+                    
+                    VStack(spacing: 16) {
+                        Text("Daily Progress")
+                            .font(.title2.bold())
+                        ProgressRingView(progress: healthManager.progress)
+                            .frame(width: 150, height: 150)
+                    }
+                    
+                    //                Button(action: {
+                    //                    healthManager.fetchTodayWorkout()
+                    //                }) {
+                    //                    Text("Refresh Data")
+                    //                        .frame(maxWidth: .infinity)
+                    //                        .padding()
+                    //                        .background(Color.blue)
+                    //                        .foregroundColor(.white)
+                    //                        .cornerRadius(12)
+                    //                }
+                    //                .padding(.horizontal)
                 }
-
-                SummaryCard(icon: "clock.fill", title: "Duration", value: formattedDuration, color: .green)
-
-                VStack(spacing: 16) {
-                    Text("Daily Progress")
-                        .font(.title2.bold())
-                    ProgressRingView(progress: healthManager.progress)
-                        .frame(width: 150, height: 150)
-                }
-
-                Button(action: {
-                    healthManager.fetchTodayWorkout()
-                }) {
-                    Text("Refresh Data")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                }
-                .padding(.horizontal)
-            }
-            .padding()
+                .padding()
+            }.navigationBarBackButtonHidden(true)
         }
         .onAppear {
             healthManager.requestAuthorization()

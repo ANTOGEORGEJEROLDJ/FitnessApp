@@ -8,114 +8,123 @@
 import SwiftUI
 import CoreData
 
-// MARK: - Login Screen
-
 struct loginScreen: View {
     @Environment(\.managedObjectContext) private var viewContext
-    
+
     @State private var userName = ""
     @State private var email = ""
     @State private var password = ""
-    
+
     @State private var navigateToProfile = false
     @State private var navigateToDetails = false
-    
-    // Fetch existing user if any (show profile directly)
+
     @FetchRequest(sortDescriptors: []) private var users: FetchedResults<User>
-    
+
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack {
-                    Image("backgroundImage")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 150, height: 150)
-                        .padding(.top)
-                    
-                    Text("Login to continue")
-                        .padding()
-                        .font(.headline)
-                        .foregroundColor(.black.opacity(0.5))
-                    
-                    VStack(spacing: 15) {
-                        CustomTextField(icon: "person.fill", placeHolder: "UserName", text: $userName)
-                        CustomTextField(icon: "envelope.fill", placeHolder: "Email", text: $email)
-                        CustomTextField(icon: "lock.fill", placeHolder: "Password", text: $password)
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.9))
-                    .cornerRadius(20)
-                    .shadow(radius: 10)
-                    .padding(.horizontal)
-                    .padding(.top, 20)
-                    
-                    Spacer()
-                    
-                    VStack(spacing: 10) {
-                        NavigationLink(destination: DetailFormView(), isActive: $navigateToDetails) {
-                            Button("Add details") {
-                                navigateToDetails = true
-                            }
-                            .frame(width: 258, height: 44)
-                            .background(Color.red.opacity(0.6))
-                            .foregroundColor(.white)
-                            .font(.headline)
-                            .bold()
+            ZStack {
+                LinearGradient(gradient: Gradient(colors: [Color.purple.opacity(0.4), Color.blue.opacity(0.4)]),
+                               startPoint: .topLeading,
+                               endPoint: .bottomTrailing)
+                    .ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: 30) {
+                        Image("backgroundImage")
+                            .resizable()
+                            .scaledToFit()
                             .cornerRadius(15)
-                            .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
-                            .padding(.bottom, 10)
+                            .frame(width: 200, height: 200)
+                            
+//                            .clipShape(Circle())
+//                            .overlay(Circle().stroke(Color.white.opacity(0.7), lineWidth: 2))
+//                            .shadow(radius: 10)
+                            .padding(.top, 40)
+                            .cornerRadius(15)
+
+                        Text("Welcome Back!")
+                            .font(.largeTitle.bold())
+                            .foregroundColor(.white)
+
+//                        Text("Login to continue your fitness journey.")
+//                            .font(.subheadline)
+//                            .foregroundColor(.white.opacity(0.8))
+
+                        VStack(spacing: 18) {
+                            CustomTextField(icon: "person.fill", placeHolder: "Username", text: $userName)
+                            CustomTextField(icon: "envelope.fill", placeHolder: "Email", text: $email)
+                            CustomTextField(icon: "lock.fill", placeHolder: "Password", text: $password)
                         }
-                        
-                        NavigationLink(destination: MainTabView().environment(\.managedObjectContext, viewContext), isActive: $navigateToProfile) {
-                            EmptyView()
+                        .padding()
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(25)
+                        .padding(.horizontal)
+                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+
+                        VStack(spacing: 14) {
+                            NavigationLink(destination: DetailFormView(), isActive: $navigateToDetails) {
+                                Button(action: {
+                                    navigateToDetails = true
+                                }) {
+                                    Text("Add Details")
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(LinearGradient(colors: [Color.orange, Color.red], startPoint: .top, endPoint: .bottom))
+                                        .foregroundColor(.white)
+                                        .font(.headline)
+                                        .cornerRadius(16)
+                                }
+                            }
+
+                            NavigationLink(destination: MainTabView().environment(\.managedObjectContext, viewContext), isActive: $navigateToProfile) {
+                                EmptyView()
+                            }
+
+                            Button(action: {
+                                saveUser()
+                            }) {
+                                Text("Login")
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(LinearGradient(colors: [Color.blue, Color.indigo], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .foregroundColor(.white)
+                                    .font(.headline)
+                                    .cornerRadius(16)
+                            }
                         }
-                        
-                        Button("Login") {
-                            saveUser()
-                        }
-                        .frame(width: 258, height: 44)
-                        .background(Color.blue.opacity(0.7))
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        .bold()
-                        .cornerRadius(15)
-                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
-                        .padding(.bottom, 10)
+                        .padding(.horizontal)
+                        .padding(.bottom, 40)
                     }
-                    .padding()
+                    .padding(.horizontal)
                 }
             }
-            .navigationTitle("Login")
+            .navigationBarHidden(true)
         }
         .onAppear {
-            // If user exists, prefill username/email (optional)
             if let user = users.first {
                 userName = user.userName ?? ""
                 email = user.email ?? ""
             }
         }
     }
-    
+
     private func saveUser() {
         guard !userName.isEmpty, !email.isEmpty else {
             print("Username and email cannot be empty")
             return
         }
-        
-        // Check if user exists, update or create new
+
         let user = users.first ?? User(context: viewContext)
         user.userName = userName
         user.email = email
-        
-        // If first time login, set defaults for others
+
         if user.age == 0 && user.gender == nil {
             user.age = 0
             user.gender = nil
             user.height = 0
             user.weight = 0
         }
-        
+
         do {
             try viewContext.save()
             navigateToProfile = true

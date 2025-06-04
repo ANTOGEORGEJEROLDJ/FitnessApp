@@ -8,27 +8,22 @@
 import SwiftUI
 
 struct CustomTextField: View {
-    
     var icon: String
     var placeHolder: String
     @Binding var text: String
-    
+
     var body: some View {
-        HStack{
+        HStack {
             Image(systemName: icon)
                 .foregroundColor(.gray)
-                .frame(width:30)
-            if placeHolder.lowercased().contains("Password"){
-                SecureField(placeHolder, text: $text)
-            }else{
-                TextField(placeHolder, text: $text)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-            }
+                .frame(width: 30)
+
+            TextField(placeHolder, text: $text)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
         }
         .padding()
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(10)
+        .background(Color.white.opacity(0.8))
+        .cornerRadius(12)
     }
 }
-

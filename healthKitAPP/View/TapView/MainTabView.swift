@@ -22,6 +22,6 @@ struct MainTabView: View {
             ProfileView().tabItem {
                 Label("Profile", systemImage: "person.crop.circle")
             }
-        }
+        }.navigationBarBackButtonHidden(true)
     }
 }
