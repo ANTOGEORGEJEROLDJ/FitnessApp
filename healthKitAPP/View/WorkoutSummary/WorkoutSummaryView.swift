@@ -48,7 +48,10 @@ struct WorkoutSummaryView: View {
         .onAppear {
             healthManager.requestAuthorization()
             healthManager.fetchTodayWorkout()
-
+            // Pull from Core Data as well
+            if let context = healthManager.context {
+                healthManager.updateProgressFromCoreData(context: context)
+            }
         }
     }
 

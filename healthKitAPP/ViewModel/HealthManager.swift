@@ -14,14 +14,16 @@ import CoreData
 class HealthManager: ObservableObject {
     private let healthStore = HKHealthStore()
         
-    
+//    let healthStore = HKHealthStore()
+
+       @Published var calories: Double = 0
+       @Published var steps: Int = 0
+       @Published var workoutDuration: Double = 0
+       @Published var progress: Double = 0.0
+
+       var context: NSManagedObjectContext?
     
 
-    @Published var calories: Double = 0
-    @Published var steps: Int = 0
-    @Published var workoutDuration: TimeInterval = 0
-    
-    @Published var progress: Double = 0.0
 
 
 //    var progress: Double {
@@ -29,38 +31,82 @@ class HealthManager: ObservableObject {
 //    }
 
     func requestAuthorization() {
-        guard HKHealthStore.isHealthDataAvailable() else { return }
+            let read = Set([
+                HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
+                HKObjectType.quantityType(forIdentifier: .stepCount)!
+            ])
 
-        let readTypes: Set<HKObjectType> = [
-            HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
-            HKObjectType.quantityType(forIdentifier: .stepCount)!,
-            HKObjectType.quantityType(forIdentifier: .appleExerciseTime)!
-        ]
-
-        healthStore.requestAuthorization(toShare: nil, read: readTypes) { success, error in
-            if success {
-                print("Authorized")
-            } else if let error = error {
-                print("Auth error: \(error)")
+            healthStore.requestAuthorization(toShare: [], read: read) { success, error in
+                if success {
+                    self.fetchTodayWorkout()
+                }
             }
         }
-    }
 
-    func fetchTodayWorkout() {
-        let startOfDay = Calendar.current.startOfDay(for: Date())
-
-        fetchQuantity(.stepCount, unit: .count(), from: startOfDay) { value in
-            self.steps = Int(value)
+        func fetchTodayWorkout() {
+            // Simulate fetching steps & calories from HealthKit
+            DispatchQueue.main.async {
+                self.steps = 8500
+                self.calories += 100 // For example
+                self.progress = min(Double(self.steps) / 10000.0, 1.0)
+            }
         }
 
-        fetchQuantity(.activeEnergyBurned, unit: .kilocalorie(), from: startOfDay) { value in
-            self.calories = value
-        }
+        func updateProgressFromCoreData(context: NSManagedObjectContext) {
+            self.context = context
 
-        fetchQuantity(.appleExerciseTime, unit: .minute(), from: startOfDay) { value in
-            self.workoutDuration = value * 60
+            let request: NSFetchRequest<Workout> = Workout.fetchRequest()
+            request.predicate = NSPredicate(format: "isCompleted == YES")
+
+            do {
+                let completedWorkouts = try context.fetch(request)
+
+                let totalCalories = completedWorkouts.reduce(0) { $0 + $1.calories }
+                let totalDuration = completedWorkouts.reduce(0) { $0 + $1.duration }
+
+                DispatchQueue.main.async {
+                    self.calories = totalCalories
+                    self.workoutDuration = totalDuration
+                }
+            } catch {
+                print("Error fetching workouts: \(error)")
+            }
         }
-    }
+    
+    
+//    func requestAuthorization() {
+//        guard HKHealthStore.isHealthDataAvailable() else { return }
+//
+//        let readTypes: Set<HKObjectType> = [
+//            HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
+//            HKObjectType.quantityType(forIdentifier: .stepCount)!,
+//            HKObjectType.quantityType(forIdentifier: .appleExerciseTime)!
+//        ]
+//
+//        healthStore.requestAuthorization(toShare: nil, read: readTypes) { success, error in
+//            if success {
+//                print("Authorized")
+//            } else if let error = error {
+//                print("Auth error: \(error)")
+//            }
+//        }
+//    }
+
+//    func fetchTodayWorkout() {
+//        let startOfDay = Calendar.current.startOfDay(for: Date())
+//
+//        fetchQuantity(.stepCount, unit: .count(), from: startOfDay) { value in
+//            self.steps = Int(value)
+//        }
+//
+//        fetchQuantity(.activeEnergyBurned, unit: .kilocalorie(), from: startOfDay) { value in
+//            self.calories = value
+//        }
+//
+//        fetchQuantity(.appleExerciseTime, unit: .minute(), from: startOfDay) { value in
+//            self.workoutDuration = value * 60
+//        }
+//    }
 
     private func fetchQuantity(_ identifier: HKQuantityTypeIdentifier, unit: HKUnit, from startDate: Date, completion: @escaping (Double) -> Void) {
         guard let quantityType = HKQuantityType.quantityType(forIdentifier: identifier) else {
@@ -95,20 +141,20 @@ class HealthManager: ObservableObject {
         }
     }
     
-    func updateProgressFromCoreData(context: NSManagedObjectContext) {
-        let request: NSFetchRequest<Workout> = Workout.fetchRequest()
-        do {
-            let allWorkouts = try context.fetch(request)
-            let total = allWorkouts.count
-            let completed = allWorkouts.filter { $0.isCompleted }.count
-
-            DispatchQueue.main.async {
-                self.progress = total > 0 ? Double(completed) / Double(total) : 0.0
-            }
-        } catch {
-            print("Error fetching workouts: \(error)")
-        }
-    }
+//    func updateProgressFromCoreData(context: NSManagedObjectContext) {
+//        let request: NSFetchRequest<Workout> = Workout.fetchRequest()
+//        do {
+//            let allWorkouts = try context.fetch(request)
+//            let total = allWorkouts.count
+//            let completed = allWorkouts.filter { $0.isCompleted }.count
+//
+//            DispatchQueue.main.async {
+//                self.progress = total > 0 ? Double(completed) / Double(total) : 0.0
+//            }
+//        } catch {
+//            print("Error fetching workouts: \(error)")
+//        }
+//    }
 
 
 }

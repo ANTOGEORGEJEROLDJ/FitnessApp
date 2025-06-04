@@ -27,11 +27,11 @@ struct WorkoutListView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(workout.title ?? "Unnamed Task")
                         .font(.headline)
-
+                    
                     Text(workout.date ?? Date(), style: .date)
                         .font(.subheadline)
                         .foregroundColor(.gray)
-
+                    
                     if !workout.isCompleted {
                         Button("Mark as Completed") {
                             workout.isCompleted = true
@@ -39,7 +39,7 @@ struct WorkoutListView: View {
                             healthManager.updateProgressFromCoreData(context: context)
                         }
                         .padding(6)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(width: 180)
                         .background(Color.green)
                         .foregroundColor(.white)
                         .cornerRadius(8)
@@ -55,26 +55,20 @@ struct WorkoutListView: View {
         .navigationTitle("Workout Tasks")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: WorkoutHistoryView()) {
-                    Image(systemName: "clock.arrow.circlepath")
-                        .imageScale(.large)
-                }
-            }
-
-            ToolbarItem(placement: .navigationBarLeading) {
                 Button("Add Tasks", action: addDefaultTasks)
             }
         }
     }
-
-    func saveContext() {
-        do {
-            try context.save()
-        } catch {
-            print("Error saving context: \(error)")
+        
+        func saveContext() {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving context: \(error)")
+            }
         }
-    }
 
+    
     func addDefaultTasks() {
         let defaultTasks = [
             ("5km Run", 1800.0, 300.0),
