@@ -12,45 +12,39 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) var context
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 40) {
-                Spacer()
-
-                Text("🏋️‍♂️ Workout Progress")
-                    .font(.largeTitle.bold())
-
-                ProgressRing(progress: healthManager.progress)
-                    .frame(width: 200, height: 200)
-
-                VStack(spacing: 20) {
-//                    Button(action: {
-//                        healthManager.requestAuthorization()
-//                        healthManager.fetchTodayWorkout()
-//                    }) {
-//                        Label("Fetch Today’s Workout", systemImage: "arrow.triangle.2.circlepath")
-//                            .modifier(FitnessButtonStyle(background: .blue))
-//                    }
-//
-//                    Button(action: {
-//                        healthManager.saveWorkout(context: context)
-//                    }) {
-//                        Label("Save Workout", systemImage: "square.and.arrow.down.fill")
-//                            .modifier(FitnessButtonStyle(background: .green))
-//                    }
-
-                    NavigationLink(destination: WorkoutListView()) {
-                        Label("Workout List", systemImage: "list.bullet")
-                            .modifier(FitnessButtonStyle(background: .orange))
+        ZStack{
+            Color.white
+            NavigationView {
+                VStack(spacing: 40) {
+                    Spacer()
+                    
+                    Text("🏋️‍♂️ Workout Progress")
+                        .font(.largeTitle.bold())
+                    
+                    
+                    Text("BIM Info")
+                        .font(.subheadline.bold())
+                    
+                    ProgressRing(progress: healthManager.progress)
+                        .frame(width: 280, height: 300)
+                    
+                    VStack(spacing: 20) {
+                        
+                        
+                        NavigationLink(destination: WorkoutListView()) {
+                            Label("Workout List", systemImage: "list.bullet")
+                                .modifier(FitnessButtonStyle(background: .orange))
+                        }
                     }
+                    
+                    Spacer()
                 }
-
-                Spacer()
+                .padding()
+                .background(
+                    LinearGradient(colors: [.white, .blue.opacity(0.05)], startPoint: .top, endPoint: .bottom)
+                        .ignoresSafeArea()
+                )
             }
-            .padding()
-            .background(
-                LinearGradient(colors: [.white, .blue.opacity(0.05)], startPoint: .top, endPoint: .bottom)
-                    .ignoresSafeArea()
-            )
         }
     }
 }

@@ -20,23 +20,39 @@ struct DetailFormView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
+        ZStack{
+            Color.white
+                .ignoresSafeArea()
         ScrollView {
-            VStack(spacing: 24) {
-                Text("Tell Us About Yourself")
-                    .font(.largeTitle.bold())
-                    .padding(.top)
+            HStack {
+                Image("humenUi") // Add your cartoon image to Assets
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 180)
                 
-                VStack(spacing: 16) {
-                    InputField(icon: "calendar", title: "Age", text: $age, keyboard: .numberPad)
-                    InputField(icon: "figure.dress.line.vertical.figure", title: "Gender", text: $gender)
-                    InputField(icon: "ruler", title: "Height (cm)", text: $height, keyboard: .decimalPad)
-                    InputField(icon: "scalemass", title: "Weight (kg)", text: $weight, keyboard: .decimalPad)
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("Gender")
+                        .font(.headline)
+                    
+                    HStack {
+                        GenderButton(label: "Male", isSelected: gender == "Male") {
+                            gender = "Male"
+                        }
+                        GenderButton(label: "Female", isSelected: gender == "Female") {
+                            gender = "Female"
+                        }
+                    }
+                    
+                    InfoInputField(title: "Age", value: $age, suffix: "")
+                    InfoInputField(title: "Height", value: $height, suffix: "cm")
+                    InfoInputField(title: "Weight", value: $weight, suffix: "lbs")
                 }
-                .padding()
-                .background(.ultraThinMaterial)
-                .cornerRadius(16)
-                .shadow(radius: 5)
-                
+                .padding(.horizontal)
+            }
+            .padding(.top)
+            Spacer()
+            
+            VStack{
                 Button(action: saveProfile) {
                     Text("Save Profile")
                         .frame(maxWidth: .infinity)
@@ -48,12 +64,15 @@ struct DetailFormView: View {
             }
             .padding()
         }
+            
+    }
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .alert("Profile Saved!", isPresented: $showSuccess) {
             Button("OK") {
                 presentationMode.wrappedValue.dismiss()
             }
         }
+        
         .navigationTitle("Your Details")
         .onAppear {
             // Prefill if user exists
@@ -64,6 +83,7 @@ struct DetailFormView: View {
                 weight = user.weight > 0 ? String(format: "%.1f", user.weight) : ""
             }
         }
+        
     }
     
     private func saveProfile() {
@@ -107,5 +127,53 @@ struct InputField: View {
         .padding(.horizontal)
         .background(Color(.secondarySystemBackground))
         .cornerRadius(10)
+    }
+}
+
+struct GenderButton: View {
+    var label: String
+    var isSelected: Bool
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Image(systemName: label == "Male" ? "person.fill" : "person.fill.viewfinder")
+                Text(label)
+            }
+            .padding(12)
+            .frame(width: 95)
+            .font(.system(size: 13))
+            .background(isSelected ? Color.blue.opacity(0.2) : Color.gray.opacity(0.1))
+            .cornerRadius(12)
+        }
+        .foregroundColor(isSelected ? .blue : .gray)
+    }
+}
+
+struct InfoInputField: View {
+    var title: String
+    @Binding var value: String
+    var suffix: String
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.gray)
+            
+            HStack {
+                TextField(title, text: $value)
+                    .keyboardType(.decimalPad)
+                    .frame(height: 40)
+                
+                Text(suffix)
+                    .foregroundColor(.blue)
+                    .padding(.trailing, 8)
+            }
+            .padding(.horizontal)
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+        }
     }
 }

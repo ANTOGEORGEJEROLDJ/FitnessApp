@@ -30,6 +30,7 @@
 		4EB0F4AB2DF0628A00827BBC /* ProfileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0F4AA2DF0628A00827BBC /* ProfileRow.swift */; };
 		4EB0F4AE2DF065FF00827BBC /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0F4AD2DF065FF00827BBC /* WorkoutListView.swift */; };
 		4EB0F4B02DF07A0300827BBC /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0F4AF2DF07A0300827BBC /* Workout.swift */; };
+		4EFEF99F2DF2C22400460894 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFEF99E2DF2C22400460894 /* SessionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		4EB0F4AA2DF0628A00827BBC /* ProfileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRow.swift; sourceTree = "<group>"; };
 		4EB0F4AD2DF065FF00827BBC /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
 		4EB0F4AF2DF07A0300827BBC /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
+		4EFEF99E2DF2C22400460894 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -232,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				4EB0F4942DF040A400827BBC /* DetailFormView.swift */,
+				4EFEF99E2DF2C22400460894 /* SessionManager.swift */,
 			);
 			path = DetailFormView;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EB0F4AB2DF0628A00827BBC /* ProfileRow.swift in Sources */,
+				4EFEF99F2DF2C22400460894 /* SessionManager.swift in Sources */,
 				4EB0F4852DF0344800827BBC /* HealthDashboardView.swift in Sources */,
 				4EB0F4952DF040A400827BBC /* DetailFormView.swift in Sources */,
 				4EB0F4A22DF05FD100827BBC /* ProgressRing.swift in Sources */,
