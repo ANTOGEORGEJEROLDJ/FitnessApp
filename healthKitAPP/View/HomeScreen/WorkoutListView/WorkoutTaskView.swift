@@ -8,52 +8,96 @@ struct WorkoutTaskView: View {
 
     var workout: Workout
     @State private var navigateToHistory = false
+    @State private var showSuccess = false
 
     var body: some View {
-        VStack(spacing: 24) {
-            Text(workout.title ?? "Workout")
-                .font(.largeTitle.bold())
-                .padding(.top)
+        ScrollView {
+            VStack(spacing: 30) {
+                
+                // MARK: - Hero Image Section
+                ZStack {
+//                    LinearGradient(colors: [Color.purple.opacity(0.6), Color.blue.opacity(0.6)],
+//                                   startPoint: .topLeading,
+//                                   endPoint: .bottomTrailing)
+//                        .ignoresSafeArea()
+//                        .frame(height: 280)
+//                        .cornerRadius(30, corners: [.bottomLeft, .bottomRight])
+                    
+                    Image(imageForWorkout(title: workout.title ?? ""))
+                        .resizable()
+//                        .scaledToFit()
+                        .frame(width: 400, height: 280)
+                        .cornerRadius(30, corners: [.bottomLeft, .bottomRight])
+                        .shadow(radius: 10)
+                        
+                }
 
-            VStack(alignment: .leading, spacing: 12) {
-                Text("🕒 Duration: \(formatDuration(workout.duration))")
-                Text("🔥 Calories: \(Int(workout.calories)) kcal")
-                Text("📅 Date: \(formattedDate(workout.date))")
+                // MARK: - Title
+                Text(workout.title ?? "Workout")
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(.primary)
+                
+                // MARK: - Workout Info Cards
+                HStack(spacing: 20) {
+                    InfoCardView(icon: "clock", label: "Duration", value: formatDuration(workout.duration))
+                    InfoCardView(icon: "flame.fill", label: "Calories", value: "\(Int(workout.calories)) kcal")
+                    InfoCardView(icon: "calendar", label: "Date", value: formattedDate(workout.date))
+                }
+                .padding(.horizontal)
+                
+                // MARK: - Workout Instructions
+                VStack(alignment: .leading, spacing: 16) {
+                    if let title = workout.title {
+                        WorkoutDetailsView(title: title)
+                    }
+                }
+                .padding()
+                .background(.ultraThinMaterial)
+                .cornerRadius(20)
+                .shadow(radius: 5)
+                .padding(.horizontal)
 
-                // Workout-specific details
-                if let title = workout.title {
-                    WorkoutDetailsView(title: title)
+                // MARK: - Completion Button
+                Button(action: {
+                    workout.isCompleted = true
+                    saveContext()
+                    healthManager.updateProgressFromCoreData(context: context)
+                    navigateToHistory = true
+                }) {
+                    Text("✅ Mark as Completed")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(LinearGradient(colors: [.green, .mint], startPoint: .leading, endPoint: .trailing))
+                        .foregroundColor(.white)
+                        .cornerRadius(14)
+                        .shadow(radius: 6)
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 30)
+
+                // Navigate to history if needed
+                NavigationLink(destination: WorkoutHistoryView(), isActive: $navigateToHistory) {
+                    EmptyView()
                 }
             }
-            .padding()
-            .background(Color.blue.opacity(0.1))
-            .cornerRadius(12)
-
-            Spacer()
-
-
-
-            Button("Mark as Completed") {
-                workout.isCompleted = true
-                saveContext()
-                healthManager.updateProgressFromCoreData(context: context)
-                navigateToHistory = true
+            .padding(.top)
+            .alert("Workout Completed 🎉", isPresented: $showSuccess) {
+                Button("OK") {
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.green)
-            .foregroundColor(.white)
-            .cornerRadius(10)
         }
-        .padding()
         .navigationBarTitle("Workout Details", displayMode: .inline)
     }
 
+    // MARK: - Utility Functions
     func saveContext() {
         do {
             try context.save()
+            showSuccess = true
         } catch {
-            print("Error saving workout: \(error)")
+            print("Error saving: \(error)")
         }
     }
 
@@ -69,5 +113,64 @@ struct WorkoutTaskView: View {
         let seconds = Int(duration) % 60
         return String(format: "%02d:%02d mins", minutes, seconds)
     }
+
+    func imageForWorkout(title: String) -> String {
+        switch title {
+        case "10 Push-ups": return "pushups"
+        case "15 min Yoga": return "yoga"
+        case "Plank 1 min": return "plank"
+        case "Jump Rope 200x": return "jumpropeimag"
+        default: return "fitness" // default placeholder image
+        }
+    }
 }
 
+// MARK: - InfoCardView Component
+struct InfoCardView: View {
+    let icon: String
+    let label: String
+    let value: String
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(.white)
+                .padding(12)
+                .background(Circle().fill(Color.blue))
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
+            Text(value)
+//                .font(.headline)
+                .font(.system(size: 12))
+                .bold()
+                
+
+        }
+        .padding()
+        .frame(width: 110)
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(radius: 4)
+    }
+}
+
+// MARK: - Corner Radius Extension
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+}
+
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect,
+                                byRoundingCorners: corners,
+                                cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}

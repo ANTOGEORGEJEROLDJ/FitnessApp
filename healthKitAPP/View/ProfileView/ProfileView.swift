@@ -29,58 +29,7 @@ struct ProfileView: View {
                         .background(RoundedRectangle(cornerRadius: 25).fill(.ultraThinMaterial).shadow(radius: 10))
                         .padding(.horizontal)
                     }
-                        // BMI Ring...
-//                        if let bmi = calculateBMI(user: user) {
-//                            VStack(spacing: 12) {
-//                                Text("Your BMI").font(.title2.bold())
-//                                ZStack {
-//                                    Circle()
-//                                        .stroke(lineWidth: 20)
-//                                        .opacity(0.2)
-//                                        .foregroundColor(Color.blue)
-//
-//                                    Circle()
-//                                        .trim(from: 0, to: CGFloat(min(bmi / 40, 1)))
-//                                        .stroke(AngularGradient(gradient: Gradient(colors: [.green, .yellow, .orange, .red]), center: .center),
-//                                                style: StrokeStyle(lineWidth: 20, lineCap: .round))
-//                                        .rotationEffect(.degrees(-90))
-//                                        .animation(.easeOut(duration: 1.2), value: bmi)
-//
-//                                    VStack {
-//                                        Text(String(format: "%.1f", bmi))
-//                                            .font(.largeTitle.bold())
-//                                        Text(bmiDescription(bmi))
-//                                            .font(.headline)
-//                                            .foregroundColor(.secondary)
-//                                    }
-//                                }
-//                                .frame(width: 180, height: 180)
-//                                .padding(.bottom)
-//                            }
-//                            .padding()
-//                            .background(RoundedRectangle(cornerRadius: 25).fill(Color.blue.opacity(0.1)).shadow(radius: 10))
-//                            .padding(.horizontal)
-//                        }
-//                    } else {
-//                        // No data state...
-//                        VStack(spacing: 24) {
-//                            Image(systemName: "person.crop.circle.badge.exclamationmark")
-//                                .resizable()
-//                                .frame(width: 100, height: 100)
-//                                .foregroundColor(.gray.opacity(0.7))
-//
-//                            Text("No profile data found")
-//                                .font(.title3.bold())
-//                                .foregroundColor(.secondary)
-//
-//                            Text("Please add your profile information to see details here.")
-//                                .font(.subheadline)
-//                                .foregroundColor(.secondary)
-//                                .multilineTextAlignment(.center)
-//                                .padding(.horizontal, 40)
-//                        }
-//                        .padding(.top, 100)
-//                    }
+
 
                     // Logout Button
                     NavigationLink(destination: loginScreen()) {
