@@ -161,8 +161,37 @@ struct WorkoutDetailsView: View {
             default:
                 Text("ℹ️ General Info")
                     .font(.headline)
-                Text("No specific instructions available for this workout.")
-                    .font(.subheadline)
+                    .foregroundColor(.purple)
+                
+                VStack{
+                Text("""
+                                                - Wear comfortable running shoes with good cushioning                                                - Warm up with light stretches or a brisk 5-minute walk.
+                                                - Maintain a steady pace throughout the run (don’t sprint early.
+                                                - Focus on posture: head up, shoulders relaxed, and arms swinging naturally
+                                          """)
+                }
+                .font(.system(size: 15))
+                .padding()
+                .cornerRadius(10)
+
+                
+                
+                    Text("Benefits:")
+                        .font(.headline)
+                        .bold()
+                        .foregroundColor(.purple)
+                    
+                    VStack{
+                        
+                    Text("""
+                    - Enhances cardiovascular health
+                    - Burns calories and aids weight loss
+                    - Builds mental endurance and discipline
+                    """)
+                }
+                .padding()
+    //            .background(.ultraThinMaterial)
+                .cornerRadius(10)
             }
         }
         .padding(.top)

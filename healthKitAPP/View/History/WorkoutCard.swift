@@ -26,32 +26,41 @@ struct WorkoutHistoryCard: View {
     var workout: Workout
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            HStack {
-                Image(systemName: "flame.fill")
-                    .foregroundColor(.orange)
-                    .font(.title2)
-                Text(workout.title ?? "Unnamed Workout")
-                    .font(.headline)
+        VStack(alignment: .center, spacing: 5) {
+                VStack{
+                    HStack {
+                        Image(systemName: "flame.fill")
+                            .foregroundColor(.orange)
+                            .font(.title2)
+                        
+                        Text(workout.title ?? "Unnamed Workout")
+                            .font(.headline)
+                    }
+                    
+                }
+                .frame(width: 243, alignment: .leading)
+                    
+                
+                
+                VStack{
+                    
+                Text(workout.date ?? Date(), style: .date)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                
+                Text("✅ Completed")
+                    .font(.caption)
+                    .foregroundColor(.green)
+                    .padding(.top, 4)
             }
-
-            Text(workout.date ?? Date(), style: .date)
-                .font(.subheadline)
-                .foregroundColor(.gray)
-
-            Text("✅ Completed")
-                .font(.caption)
-                .foregroundColor(.green)
-                .padding(.top, 4)
+            .padding(.trailing, 150)
         }
+        .frame(width: 300, alignment: .leading)
         .padding()
-        .frame(width: 360)
-        .shadow(radius: 30)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white)
-                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
-        )
+        .background(.ultraThinMaterial)
+        .shadow(radius: 5)
+        .cornerRadius(15)
+        
     }
 }
 //

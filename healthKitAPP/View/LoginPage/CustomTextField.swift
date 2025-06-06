@@ -18,12 +18,17 @@ struct CustomTextField: View {
                 .foregroundColor(.gray)
                 .frame(width: 30)
 
-            TextField(placeHolder, text: $text)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
+            if placeHolder.lowercased().contains("password") {
+                SecureField(placeHolder, text: $text)
+            } else {
+                TextField(placeHolder, text: $text)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+            }
         }
         .padding()
-        .background(Color.white.opacity(0.8))
+        .background(Color.white)
+        .cornerRadius(3)
         .cornerRadius(12)
     }
 }

@@ -12,6 +12,7 @@ import CoreData
 struct WorkoutListView: View {
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Workout.date, ascending: false)],
+        predicate: NSPredicate(format: "isCompleted == %@", NSNumber(value: false)),  // ✅ Only incomplete workouts
         animation: .default
     )
     var workouts: FetchedResults<Workout>
@@ -39,6 +40,12 @@ struct WorkoutListView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add Tasks", action: addDefaultTasks)
+                        .padding()
+                        .frame(width: 120, height: 50)
+                        .background(Color.blue.opacity(0.3))
+                        .cornerRadius(10)
+                        .foregroundColor(.black)
+                        .bold()
                 }
             }
         }

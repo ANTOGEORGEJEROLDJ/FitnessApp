@@ -23,10 +23,11 @@ struct loginScreen: View {
     var body: some View {
         NavigationView {
             ZStack {
-                LinearGradient(gradient: Gradient(colors: [Color.purple.opacity(0.4), Color.blue.opacity(0.4)]),
-                               startPoint: .topLeading,
-                               endPoint: .bottomTrailing)
-                    .ignoresSafeArea()
+                
+//                LinearGradient(gradient: Gradient(colors: [Color.purple.opacity(0.4), Color.blue.opacity(0.4)]),
+//                               startPoint: .topLeading,
+//                               endPoint: .bottomTrailing)
+//                    .ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 30) {
@@ -35,16 +36,9 @@ struct loginScreen: View {
                             .scaledToFit()
                             .cornerRadius(15)
                             .frame(width: 200, height: 200)
-                            
-//                            .clipShape(Circle())
-//                            .overlay(Circle().stroke(Color.white.opacity(0.7), lineWidth: 2))
-//                            .shadow(radius: 10)
                             .padding(.top, 40)
                             .cornerRadius(15)
 
-//                        Text("Welcome Back!")
-//                            .font(.largeTitle.bold())
-//                            .foregroundColor(.white)
 
                         Text("Login to continue your fitness journey.")
                             .font(.subheadline)
@@ -58,10 +52,12 @@ struct loginScreen: View {
                             CustomTextField(icon: "lock.fill", placeHolder: "Password", text: $password)
                         }
                         .padding()
-                        .background(.ultraThinMaterial)
+                        .background(Color.white.opacity(0.3))
                         .cornerRadius(25)
                         .padding(.horizontal)
-                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                        .shadow(radius: 0.3)
+                        .padding(.top,-30)
+                        
 
                         VStack(spacing: 14) {
                             NavigationLink(destination: DetailFormView(), isActive: $navigateToDetails) {

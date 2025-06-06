@@ -11,93 +11,87 @@ struct WorkoutTaskView: View {
     @State private var showSuccess = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 30) {
-                
-                // MARK: - Hero Image Section
-                ZStack {
-//                    LinearGradient(colors: [Color.purple.opacity(0.6), Color.blue.opacity(0.6)],
-//                                   startPoint: .topLeading,
-//                                   endPoint: .bottomTrailing)
-//                        .ignoresSafeArea()
-//                        .frame(height: 280)
-//                        .cornerRadius(30, corners: [.bottomLeft, .bottomRight])
+//        NavigationStack {
+            ScrollView {
+                VStack(spacing: 30) {
                     
-                    Image(imageForWorkout(title: workout.title ?? ""))
-                        .resizable()
-//                        .scaledToFit()
-                        .frame(width: 400, height: 280)
-                        .cornerRadius(30, corners: [.bottomLeft, .bottomRight])
-                        .shadow(radius: 10)
-                        
-                }
+                    // Hero Image
+                    ZStack {
+                        Image(imageForWorkout(title: workout.title ?? ""))
+                            .resizable()
+                            .frame(width: 400, height: 280)
+                            .cornerRadius(30, corners: [.bottomLeft, .bottomRight])
+                            .shadow(radius: 10)
+                    }
+                    
+                    Text(workout.title ?? "Workout")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.primary)
 
-                // MARK: - Title
-                Text(workout.title ?? "Workout")
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(.primary)
-                
-                // MARK: - Workout Info Cards
-                HStack(spacing: 20) {
-                    InfoCardView(icon: "clock", label: "Duration", value: formatDuration(workout.duration))
-                    InfoCardView(icon: "flame.fill", label: "Calories", value: "\(Int(workout.calories)) kcal")
-                    InfoCardView(icon: "calendar", label: "Date", value: formattedDate(workout.date))
-                }
-                .padding(.horizontal)
-                
-                // MARK: - Workout Instructions
-                VStack(alignment: .leading, spacing: 16) {
-                    if let title = workout.title {
-                        WorkoutDetailsView(title: title)
+                    // Info Cards
+                    HStack(spacing: 20) {
+                        InfoCardView(icon: "clock", label: "Duration", value: formatDuration(workout.duration))
+                        InfoCardView(icon: "flame.fill", label: "Calories", value: "\(Int(workout.calories)) kcal")
+                        InfoCardView(icon: "calendar", label: "Date", value: formattedDate(workout.date))
+                    }
+                    .padding(.horizontal)
+
+                    // Workout Instructions
+                    VStack(alignment: .leading, spacing: 16) {
+                        if let title = workout.title {
+                            WorkoutDetailsView(title: title)
+                        }
+                    }
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(20)
+                    .shadow(radius: 5)
+                    .padding(.horizontal)
+
+                    // Mark as Completed Button
+                    Button(action: {
+                        workout.isCompleted = true
+                        saveContext()
+                        healthManager.updateProgressFromCoreData(context: context)
+                        navigateToHistory = true
+                    }) {
+                        Text("✅ Mark as Completed")
+                            .fontWeight(.bold)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(LinearGradient(colors: [.green, .mint], startPoint: .leading, endPoint: .trailing))
+                            .foregroundColor(.white)
+                            .cornerRadius(14)
+                            .shadow(radius: 6)
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 30)
+
+                    NavigationLink(destination: WorkoutHistoryView(), isActive: $navigateToHistory) {
+                        EmptyView()
                     }
                 }
-                .padding()
-                .background(.ultraThinMaterial)
-                .cornerRadius(20)
-                .shadow(radius: 5)
-                .padding(.horizontal)
-
-                // MARK: - Completion Button
-                Button(action: {
-                    workout.isCompleted = true
-                    saveContext()
-                    healthManager.updateProgressFromCoreData(context: context)
-                    navigateToHistory = true
-                }) {
-                    Text("✅ Mark as Completed")
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(LinearGradient(colors: [.green, .mint], startPoint: .leading, endPoint: .trailing))
-                        .foregroundColor(.white)
-                        .cornerRadius(14)
-                        .shadow(radius: 6)
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 30)
-
-                // Navigate to history if needed
-                NavigationLink(destination: WorkoutHistoryView(), isActive: $navigateToHistory) {
-                    EmptyView()
+                .padding(.top)
+                .alert("Workout Completed 🎉", isPresented: $showSuccess) {
+                    Button("OK") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
             }
-            .padding(.top)
-            .alert("Workout Completed 🎉", isPresented: $showSuccess) {
-                Button("OK") {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            }
-        }
+//        }
         .navigationBarTitle("Workout Details", displayMode: .inline)
+        .navigationBarBackButtonHidden()
     }
 
     // MARK: - Utility Functions
     func saveContext() {
-        do {
-            try context.save()
-            showSuccess = true
-        } catch {
-            print("Error saving: \(error)")
+        withAnimation {
+            do {
+                try context.save()
+                showSuccess = true
+            } catch {
+                print("Error saving: \(error)")
+            }
         }
     }
 
@@ -120,12 +114,12 @@ struct WorkoutTaskView: View {
         case "15 min Yoga": return "yoga"
         case "Plank 1 min": return "plank"
         case "Jump Rope 200x": return "jumpropeimag"
-        default: return "fitness" // default placeholder image
+        default: return "running"
         }
     }
 }
 
-// MARK: - InfoCardView Component
+// MARK: - InfoCardView
 struct InfoCardView: View {
     let icon: String
     let label: String
@@ -142,11 +136,8 @@ struct InfoCardView: View {
                 .font(.caption)
                 .foregroundColor(.gray)
             Text(value)
-//                .font(.headline)
                 .font(.system(size: 12))
                 .bold()
-                
-
         }
         .padding()
         .frame(width: 110)
@@ -168,9 +159,11 @@ struct RoundedCorner: Shape {
     var corners: UIRectCorner = .allCorners
 
     func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect,
-                                byRoundingCorners: corners,
-                                cornerRadii: CGSize(width: radius, height: radius))
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
         return Path(path.cgPath)
     }
 }

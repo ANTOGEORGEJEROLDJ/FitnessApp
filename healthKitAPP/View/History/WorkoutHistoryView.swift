@@ -14,39 +14,40 @@ struct WorkoutHistoryView: View {
     ) var workouts: FetchedResults<Workout>
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                if workouts.isEmpty {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Image(systemName: "figure.walk.circle")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 80)
-                            .foregroundColor(.gray)
-                        Text("No completed workouts yet")
-                            .font(.title3.bold())
-                            .foregroundColor(.gray)
-                        Text("Once you complete a workout, it'll show up here.")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal)
-                    }
-//                    .frame(width: 410)
-                    .padding(.top, 100)
-                } else {
-                    ForEach(workouts) { workout in
-                        WorkoutHistoryCard(workout: workout)
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if workouts.isEmpty {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Image(systemName: "figure.walk.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 80)
+                                .foregroundColor(.gray)
+                            Text("No completed workouts yet")
+                                .font(.title3.bold())
+                                .foregroundColor(.gray)
+                            Text("Once you complete a workout, it'll show up here.")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal)
+                        }
+                        //                    .frame(width: 410)
+                        .padding(.top, 100)
+                    } else {
+                        ForEach(workouts) { workout in
+                            WorkoutHistoryCard(workout: workout)
+                        }
                     }
                 }
+                .frame(width: 410)
+                .padding()
             }
             .frame(width: 410)
-            .padding()
+            .navigationTitle("🏆 Workout History")
+            .background(Color.white.opacity(0.8))
         }
-        .frame(width: 410)
-        .navigationTitle("🏆 Workout History")
-        .background(Color.white.opacity(0.8))
-        
     }
 }
 struct WorkoutHistoryView_Previews: PreviewProvider {
