@@ -2,7 +2,7 @@
 //  ProfileView.swift
 //  healthKitAPP
 //
-//  Created by Paranjothi iOS MacBook Pro on 04/06/25.
+//  Created by antogeorgejerold iOS MacBook Pro on 04/06/25.
 //
 
 import SwiftUI
