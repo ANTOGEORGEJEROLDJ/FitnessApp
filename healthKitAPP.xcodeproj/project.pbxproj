@@ -31,6 +31,8 @@
 		4EB0F4AE2DF065FF00827BBC /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0F4AD2DF065FF00827BBC /* WorkoutListView.swift */; };
 		4EB0F4B02DF07A0300827BBC /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0F4AF2DF07A0300827BBC /* Workout.swift */; };
 		4EFEF99F2DF2C22400460894 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFEF99E2DF2C22400460894 /* SessionManager.swift */; };
+		4EFEF9A12DF2D8C700460894 /* WorkoutTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFEF9A02DF2D8C700460894 /* WorkoutTaskView.swift */; };
+		4EFEF9A32DF2D9B600460894 /* WorkoutDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFEF9A22DF2D9B600460894 /* WorkoutDetailsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,8 @@
 		4EB0F4AD2DF065FF00827BBC /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
 		4EB0F4AF2DF07A0300827BBC /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
 		4EFEF99E2DF2C22400460894 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		4EFEF9A02DF2D8C700460894 /* WorkoutTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTaskView.swift; sourceTree = "<group>"; };
+		4EFEF9A22DF2D9B600460894 /* WorkoutDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -269,6 +273,8 @@
 			isa = PBXGroup;
 			children = (
 				4EB0F4AD2DF065FF00827BBC /* WorkoutListView.swift */,
+				4EFEF9A02DF2D8C700460894 /* WorkoutTaskView.swift */,
+				4EFEF9A22DF2D9B600460894 /* WorkoutDetailsView.swift */,
 			);
 			path = WorkoutListView;
 			sourceTree = "<group>";
@@ -424,6 +430,7 @@
 				4EB0F4A02DF05FBA00827BBC /* StatCard.swift in Sources */,
 				4EB0F4A42DF0600600827BBC /* FitnessButtonStyle.swift in Sources */,
 				4EB0F4742DF0327F00827BBC /* CoreDataModel.xcdatamodeld in Sources */,
+				4EFEF9A12DF2D8C700460894 /* WorkoutTaskView.swift in Sources */,
 				4EB0F4752DF0327F00827BBC /* HealthManager.swift in Sources */,
 				4EB0F4812DF032BA00827BBC /* CustomTextField.swift in Sources */,
 				4EB0F4762DF0327F00827BBC /* PersistenceController.swift in Sources */,
@@ -431,6 +438,7 @@
 				4EB0F4772DF0327F00827BBC /* ProgressRingView.swift in Sources */,
 				4EB0F4A92DF061B000827BBC /* SummaryCard.swift in Sources */,
 				4EB0F4782DF0327F00827BBC /* WorkoutHistoryView.swift in Sources */,
+				4EFEF9A32DF2D9B600460894 /* WorkoutDetailsView.swift in Sources */,
 				4EB0F4792DF0327F00827BBC /* WorkoutSummaryView.swift in Sources */,
 				4EB0F47A2DF0327F00827BBC /* ContentView.swift in Sources */,
 				4EB0F4B02DF07A0300827BBC /* Workout.swift in Sources */,

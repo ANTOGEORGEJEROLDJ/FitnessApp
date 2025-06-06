@@ -25,7 +25,7 @@ struct ProgressRing: View {
                         // BMI Ring...
                         if let bmi = calculateBMI(user: user) {
                             VStack(spacing: 12) {
-                                Text("Your BMI").font(.title2.bold())
+                                Text("BMI Measurement").font(.title2.bold())
                                 ZStack {
                                     Circle()
                                         .stroke(lineWidth: 20)
